@@ -1,6 +1,6 @@
 ---
 title: "PS270 Final Project"
-author: "Your Name Here"
+author: "Farrah Israel"
 description: "My final project"
 output:
   distill::distill_article:
@@ -10,5 +10,6 @@ output:
 
 
 ## Project thoughts
+Maybe doing using Professor Bates research since I will be her RA this summer
 
 I am interested in exploring data related to...
