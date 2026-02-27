@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","social_media_data.csv"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1544,10 +1544,68 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<h2 id="project-thoughts">Project thoughts</h2>
-<p>Maybe doing using Professor Bates research since I will be her RA this summer</p>
-<p>I am interested in exploring data related to…</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="final-project-thoughts">Final Project Thoughts</h2>
+<p>I am thinking about using data I coded last summer about partisanship of abortion in twitter posts</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>social_media_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='st'>"social_media_data.csv"</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>social_media_data</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>  relevance stance frame_choice frame_healthcare frame_access
+1         1      1            0                1            0
+2         1      3           NA               NA           NA
+3         1      3           NA               NA           NA
+4         1      1            0                0            0
+5         1      1            1                1            0
+6         1      1            0                0            0
+  frame_race frame_class frame_life_fetus frame_religious_moral
+1          1           1             &lt;NA&gt;                    NA
+2         NA          NA             &lt;NA&gt;                    NA
+3         NA          NA             &lt;NA&gt;                    NA
+4          0           0             &lt;NA&gt;                    NA
+5          0           0             &lt;NA&gt;                    NA
+6          0           0             &lt;NA&gt;                    NA
+  frame_health_impact attack_abortion_opponent
+1                  NA                        1
+2                  NA                       NA
+3                  NA                        0
+4                  NA                        1
+5                  NA                        0
+6                  NA                        1
+  attack_abortion_supporter legal_policy vote_mobilization advocacy
+1                        NA            0                 0        0
+2                        NA            0                 0        0
+3                         0            1                 0        0
+4                         0            0                 0        0
+5                        NA            0                 0        0
+6                        NA            0                 0        0
+  care_recognition care_responsibility care_action care_responsive
+1                1                   0           0               0
+2                0                   0           0               0
+3                0                   0           0               0
+4                0                   0           0               0
+5                1                   0           0               0
+6                0                   0           0               0
+  personal_experience experience_type institution institution_text
+1                   0              NA           0             &lt;NA&gt;
+2                   0              NA           0             &lt;NA&gt;
+3                   0              NA           1  &quot;Supreme Court&quot;
+4                   0              NA           0             &lt;NA&gt;
+5                   0              NA           7   &quot;this country&quot;
+6                   0              NA           0             &lt;NA&gt;
+  institution_distrust
+1                 &lt;NA&gt;
+2                 &lt;NA&gt;
+3                    0
+4                 &lt;NA&gt;
+5                    0
+6                 &lt;NA&gt;</code></pre>
+</div>
+<h2 id="proposal">Proposal</h2>
+<p>This project uses a dataset of Twitter posts related to abortion and reproductive rights, coded according to a structured content analysis codebook. I coded these tweets last summer when I was a research assistant for the University of Wisconsin-Madison’s School of Journalism and Mass Communicaton.</p>
+<p>The unit of analysis is the full post (including retweets with comments), and posts are systematically coded for stance, framing strategies, partisan attacks, institutional references, and care-related themes. My research question is: How do framing strategies in abortion-related Twitter posts relate to whether the post takes a pro-abortion-rights or anti-abortion-rights stance? Drawing on framing theory and moral foundations theory, I hypothesize that posts emphasizing bodily autonomy, healthcare access, racial or class inequality (e.g., frame_choice, frame_healthcare, frame_access, frame_race, frame_class) will be more likely to take a pro-abortion-rights stance, whereas posts emphasizing fetal life, religious morality, or alleged negative health impacts (e.g., frame_life_fetus, frame_religious, frame_health_impact) will be more likely to take an anti-abortion-rights stance. The theoretical logic is that frames activate distinct moral and ideological values: autonomy and healthcare frames appeal to liberal principles of individual rights and social equality, while life/fetus and religious frames activate conservative moral commitments to sanctity, traditionalism, and protection of unborn life. These are systematic ideological patterns rather than idiosyncratic expressions, making them appropriate for regression analysis.</p>
+<p>My dependent variable is stance, coded as 1 = in favor of abortion rights, 2 = against abortion rights, and 3 = neutral/unclear. For regression purposes, this can be modeled as a binary outcome (pro-choice vs. anti-abortion) or using multinomial logistic regression if neutral posts are included. My key independent variables are binary indicators of framing (coded 1 = present, 0 = not present, 99 = not applicable), which vary across posts and allow for statistical comparison. Support for my hypothesis would be demonstrated if regression results show that autonomy- and healthcare-based frames significantly increase the probability that a post supports abortion rights, while life/fetus and religious frames significantly increase the probability that a post opposes abortion rights. The hypothesis would be disconfirmed if these framing variables are statistically insignificant, if their effects are substantively small, or if they predict the opposite direction (for example, if life/fetus framing is associated with pro-abortion-rights posts). Such findings would suggest that framing does not systematically structure partisan stance in the way theory predicts.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
