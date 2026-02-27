@@ -9,7 +9,17 @@ output:
 
 
 
-## Project thoughts
-Maybe doing using Professor Bates research since I will be her RA this summer
+## Final Project Thoughts
 
-I am interested in exploring data related to...
+I am thinking about using data I coded last summer about partisanship of abortion in twitter posts
+
+```{r}
+social_media_data <- read.csv("social_media_data.csv")
+head(social_media_data)
+```
+## Proposal
+This project uses a dataset of Twitter posts related to abortion and reproductive rights, coded according to a structured content analysis codebook. I coded these tweets last summer when I was a research assistant for the University of Wisconsin-Madison's School of Journalism and Mass Communicaton.
+
+The unit of analysis is the full post (including retweets with comments), and posts are systematically coded for stance, framing strategies, partisan attacks, institutional references, and care-related themes. My research question is: How do framing strategies in abortion-related Twitter posts relate to whether the post takes a pro-abortion-rights or anti-abortion-rights stance? Drawing on framing theory and moral foundations theory, I hypothesize that posts emphasizing bodily autonomy, healthcare access, racial or class inequality (e.g., frame_choice, frame_healthcare, frame_access, frame_race, frame_class) will be more likely to take a pro-abortion-rights stance, whereas posts emphasizing fetal life, religious morality, or alleged negative health impacts (e.g., frame_life_fetus, frame_religious, frame_health_impact) will be more likely to take an anti-abortion-rights stance. The theoretical logic is that frames activate distinct moral and ideological values: autonomy and healthcare frames appeal to liberal principles of individual rights and social equality, while life/fetus and religious frames activate conservative moral commitments to sanctity, traditionalism, and protection of unborn life. These are systematic ideological patterns rather than idiosyncratic expressions, making them appropriate for regression analysis.
+
+My dependent variable is stance, coded as 1 = in favor of abortion rights, 2 = against abortion rights, and 3 = neutral/unclear. For regression purposes, this can be modeled as a binary outcome (pro-choice vs. anti-abortion) or using multinomial logistic regression if neutral posts are included. My key independent variables are binary indicators of framing (coded 1 = present, 0 = not present, 99 = not applicable), which vary across posts and allow for statistical comparison. Support for my hypothesis would be demonstrated if regression results show that autonomy- and healthcare-based frames significantly increase the probability that a post supports abortion rights, while life/fetus and religious frames significantly increase the probability that a post opposes abortion rights. The hypothesis would be disconfirmed if these framing variables are statistically insignificant, if their effects are substantively small, or if they predict the opposite direction (for example, if life/fetus framing is associated with pro-abortion-rights posts). Such findings would suggest that framing does not systematically structure partisan stance in the way theory predicts.
