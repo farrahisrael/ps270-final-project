@@ -66,11 +66,5 @@ RAdata |>
   )
 ```
 
-```{r}
 
-```
-
-WON'T COMMIT CHANGES... WHERE DID GIT GO?
-=======
-**The explanatory variables of interest in this analysis are the framing indicators included in the dataset, specifically frame_choice, frame_healthcare, frame_access, frame_race, frame_class, frame_life_fetus, frame_religious, and frame_health_impact. Each of these variables is measured as a binary indicator, coded 1 if the frame is present in the post and 0 if it is not (with 99 indicating not applicable).** Because not all posts employ the same framing strategies, these variables exhibit meaningful variation across observations, which allows for systematic comparison and regression analysis. **The outcome variable is stance, which captures the author’s position toward abortion rights and is coded as 1 = in favor, 2 = against, and 3 = neutral/unclear.** This categorical measurement allows the analysis to assess whether the presence of particular frames is associated with an increased likelihood of taking one stance over another.
->>>>>>> b1608184448e63e3722ff398e5d6c791cf5f3ae1
+**The explanatory variables of interest in this analysis are the framing indicators included in the dataset, specifically frame_choice, frame_healthcare, frame_access, frame_race, frame_class, frame_life_fetus, frame_religious, and frame_health_impact. Each of these variables is measured as a binary indicator, coded 1 if the frame is present in the post and 0 if it is not (with 99 indicating not applicable).** Because not all posts employ the same framing strategies, these variables exhibit meaningful variation across observations, which allows for systematic comparison and regression analysis. **The outcome variable is stance, which captures the author’s position toward abortion rights and is coded as 1 = in favor, 2 = against, and 3 = neutral/unclear.** This categorical measurement allows the analysis to assess whether the presence of particular frames is associated with an increased likelihood of taking one stance over another
