@@ -1,6 +1,6 @@
 ---
 title: "PS270 Final Project"
-author: "Farrah Israel"
+author: "Farrah J. Israel"
 description: "My final project"
 output:
   html_document
@@ -13,6 +13,7 @@ output:
 I am thinking about using data I coded last summer about partisanship of abortion in twitter posts
 
 ```{r}
+library(tidyverse)
 social_media_data <- read.csv("social_media_data.csv")
 head(social_media_data)
 ```
@@ -23,4 +24,53 @@ The unit of analysis is the full post (including retweets with comments), and po
 
 **My dependent variable** is stance, coded as 1 = in favor of abortion rights, 2 = against abortion rights, and 3 = neutral/unclear. For regression purposes, this can be modeled as a binary outcome (pro-choice vs. anti-abortion) or using multinomial logistic regression if neutral posts are included. My key independent variables are binary indicators of framing (coded 1 = present, 0 = not present, 99 = not applicable), which vary across posts and allow for statistical comparison. Support for my hypothesis would be demonstrated if regression results show that autonomy- and healthcare-based frames significantly increase the probability that a post supports abortion rights, while life/fetus and religious frames significantly increase the probability that a post opposes abortion rights. The hypothesis would be disconfirmed if these framing variables are statistically insignificant, if their effects are substantively small, or if they predict the opposite direction (for example, if life/fetus framing is associated with pro-abortion-rights posts). Such findings would suggest that framing does not systematically structure partisan stance in the way theory predicts.
 
+
 **The explanatory variables of interest in this analysis are the framing indicators included in the dataset, specifically frame_choice, frame_healthcare, frame_access, frame_race, frame_class, frame_life_fetus, frame_religious, and frame_health_impact. Each of these variables is measured as a binary indicator, coded 1 if the frame is present in the post and 0 if it is not (with 99 indicating not applicable).** Because not all posts employ the same framing strategies, these variables exhibit meaningful variation across observations, which allows for systematic comparison and regression analysis. **The outcome variable is stance, which captures the author’s position toward abortion rights and is coded as 1 = in favor, 2 = against, and 3 = neutral/unclear.** This categorical measurement allows the analysis to assess whether the presence of particular frames is associated with an increased likelihood of taking one stance over another.
+
+## Switching Datasets
+# Research Question: Does democracy improve access to justice?
+# Load the Data
+```{r}
+library(tidyverse)
+load("RAData.RData")
+head(RAdata)
+```
+# Clean Data: Rename Columns, Get rid of NAs, Select Data needed for research question
+```{r}
+RAdata <- RAdata |>
+  rename(
+    Liberal_Democracy = v2x_libdem,
+    Access_to_Justice = v2xcl_acjst
+  ) |>
+  select(country, year, Liberal_Democracy, Access_to_Justice) |>
+  filter(!is.na(Liberal_Democracy), !is.na(Access_to_Justice))
+RAdata
+```
+#Visualization
+```{r}
+library(tidyverse)
+
+RAdata |>
+  ggplot(aes(x = Liberal_Democracy, y = Access_to_Justice)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "darkred") +
+  labs(
+    title = "Does Democracy Improve Access to Justice?",
+    subtitle = "Country-Year Observations Worldwide",
+    x = "Level of Liberal Democracy",
+    y = "Access to Justice Index") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12)
+  )
+```
+
+```{r}
+
+```
+
+WON'T COMMIT CHANGES... WHERE DID GIT GO?
+=======
+**The explanatory variables of interest in this analysis are the framing indicators included in the dataset, specifically frame_choice, frame_healthcare, frame_access, frame_race, frame_class, frame_life_fetus, frame_religious, and frame_health_impact. Each of these variables is measured as a binary indicator, coded 1 if the frame is present in the post and 0 if it is not (with 99 indicating not applicable).** Because not all posts employ the same framing strategies, these variables exhibit meaningful variation across observations, which allows for systematic comparison and regression analysis. **The outcome variable is stance, which captures the author’s position toward abortion rights and is coded as 1 = in favor, 2 = against, and 3 = neutral/unclear.** This categorical measurement allows the analysis to assess whether the presence of particular frames is associated with an increased likelihood of taking one stance over another.
+>>>>>>> b1608184448e63e3722ff398e5d6c791cf5f3ae1
