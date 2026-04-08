@@ -5,66 +5,230 @@ description: "My final project"
 output:
   html_document
 ---
-
-
-
-## Final Project Thoughts
-
-I am thinking about using data I coded last summer about partisanship of abortion in twitter posts
+# Load the data
 
 ```{r}
 library(tidyverse)
-social_media_data <- read.csv("social_media_data.csv")
-head(social_media_data)
-```
-## Proposal
-This project uses a dataset of Twitter posts related to abortion and reproductive rights, coded according to a structured content analysis codebook. I coded these tweets last summer when I was a research assistant for the University of Wisconsin-Madison's School of Journalism and Mass Communicaton.
-
-The unit of analysis is the full post (including retweets with comments), and posts are systematically coded for stance, framing strategies, partisan attacks, institutional references, and care-related themes. **My research question is: How do framing strategies in abortion-related Twitter posts relate to whether the post takes a pro-abortion-rights or anti-abortion-rights stance?** Drawing on framing theory and moral foundations theory, **I hypothesize that posts emphasizing bodily autonomy, healthcare access, racial or class inequality (e.g., frame_choice, frame_healthcare, frame_access, frame_race, frame_class) will be more likely to take a pro-abortion-rights stance, whereas posts emphasizing fetal life, religious morality, or alleged negative health impacts (e.g., frame_life_fetus, frame_religious, frame_health_impact) will be more likely to take an anti-abortion-rights stance.** The theoretical logic is that frames activate distinct moral and ideological values: autonomy and healthcare frames appeal to liberal principles of individual rights and social equality, while life/fetus and religious frames activate conservative moral commitments to sanctity, traditionalism, and protection of unborn life. These are systematic ideological patterns rather than idiosyncratic expressions, making them appropriate for regression analysis.
-
-**My dependent variable** is stance, coded as 1 = in favor of abortion rights, 2 = against abortion rights, and 3 = neutral/unclear. For regression purposes, this can be modeled as a binary outcome (pro-choice vs. anti-abortion) or using multinomial logistic regression if neutral posts are included. My key independent variables are binary indicators of framing (coded 1 = present, 0 = not present, 99 = not applicable), which vary across posts and allow for statistical comparison. Support for my hypothesis would be demonstrated if regression results show that autonomy- and healthcare-based frames significantly increase the probability that a post supports abortion rights, while life/fetus and religious frames significantly increase the probability that a post opposes abortion rights. The hypothesis would be disconfirmed if these framing variables are statistically insignificant, if their effects are substantively small, or if they predict the opposite direction (for example, if life/fetus framing is associated with pro-abortion-rights posts). Such findings would suggest that framing does not systematically structure partisan stance in the way theory predicts.
-
-
-**The explanatory variables of interest in this analysis are the framing indicators included in the dataset, specifically frame_choice, frame_healthcare, frame_access, frame_race, frame_class, frame_life_fetus, frame_religious, and frame_health_impact. Each of these variables is measured as a binary indicator, coded 1 if the frame is present in the post and 0 if it is not (with 99 indicating not applicable).** Because not all posts employ the same framing strategies, these variables exhibit meaningful variation across observations, which allows for systematic comparison and regression analysis. **The outcome variable is stance, which captures the author’s position toward abortion rights and is coded as 1 = in favor, 2 = against, and 3 = neutral/unclear.** This categorical measurement allows the analysis to assess whether the presence of particular frames is associated with an increased likelihood of taking one stance over another.
-
-## Switching Datasets
-# Research Question: Does democracy improve access to justice?
-# Load the Data
-```{r}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 load("RAData.RData")
-head(RAdata)
 ```
-# Clean Data: Rename Columns, Get rid of NAs, Select Data needed for research question
+
+# Rename Columns
+
 ```{r}
 RAdata <- RAdata |>
   rename(
+    Country = country,
+    Year = year,
+    Intervention = intervention,
+    Investigation = investigation,
+    Prosecute = prosecute,
     Liberal_Democracy = v2x_libdem,
-    Access_to_Justice = v2xcl_acjst
-  ) |>
-  select(country, year, Liberal_Democracy, Access_to_Justice) |>
-  filter(!is.na(Liberal_Democracy), !is.na(Access_to_Justice))
+    Access_to_Justice = v2xcl_acjst,
+    Civil_Society = v2xcs_ccsi,
+    Atrocities = log_atrocities,
+    ICC_Involvement = involvementm,
+    Cooperation_Investigation = stateCinv,
+    Cooperation_Prosecution = stateCpros)
 RAdata
 ```
-#Visualization
-```{r}
-library(tidyverse)
+# Add Continent Column
 
+```{r}
+Africa <- c("Algeria","Angola","Benin","Botswana","Burkina Faso","Burundi","Cameroon",
+  "Cape Verde","Central African Republic","Chad","Comoros","Cote d'Ivoire",
+  "Democratic Republic of Congo","Egypt","Equatorial Guinea","Eritrea","Ethiopia",
+  "Gambia","Ghana","Guinea","Kenya","Lesotho","Liberia","Libya","Madagascar","Malawi",
+  "Mali","Mauritania","Mauritius","Morocco","Mozambique","Namibia","Niger","Nigeria",
+  "Republic of Congo","Rwanda","Senegal","Sierra Leone","Somalia","South Africa",
+  "South Sudan","Sudan","Tanzania","Togo","Tunisia","Uganda","Zambia","Zimbabwe")
+North_America <- c("Canada","United States","Mexico","Costa Rica","Cuba",
+  "Dominican Republic","El Salvador","Grenada","Guatemala","Haiti","Honduras",
+  "Jamaica","Nicaragua","Panama")
+South_America <- c("Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador",
+  "Paraguay","Peru","Suriname","Uruguay","Venezuela")
+Asia <- c("Afghanistan","Azerbaijan","Bahrain","Bangladesh","Bhutan","Cambodia","China",
+  "Cyprus","Georgia","Hong Kong","India","Indonesia","Iran","Iraq","Israel","Japan",
+  "Jordan","Kazakhstan","Kuwait","Lebanon","Malaysia","Mongolia","Myanmar","Nepal",
+  "North Korea","Pakistan", "Philippines","Qatar","Saudi Arabia","Singapore",
+  "South Korea","Sri Lanka","Syria","Taiwan","Thailand","Timor-Leste","Turkey",
+  "United Arab Emirates","Uzbekistan","Vietnam","Yemen")
+Europe <- c("Albania","Austria","Belarus","Belgium","Bosnia and Herzegovina","Bulgaria",
+  "Croatia","Czech Republic","Denmark","Finland","France","Germany","Greece","Hungary",
+  "Iceland","Ireland","Italy","Kosovo","Latvia","Liechtenstein","Lithuania","Malta",
+  "Moldova","Netherlands","Northern Ireland","Norway","Poland","Portugal","Romania",
+  "Russia","Serbia","Slovakia","Slovenia","Spain","Sweden","Switzerland","Ukraine",
+  "United Kingdom","Yugoslavia")
+Oceania <- c("Australia","Fiji","Marshall Islands","Micronesia","New Zealand","Palau","Vanuatu")
+
+RAdata <- RAdata |>
+  mutate(
+    Continent = case_when(
+      Country %in% Africa ~ "Africa",
+      Country %in% North_America ~ "North America",
+      Country %in% South_America ~ "South America",
+      Country %in% Asia ~ "Asia",
+      Country %in% Europe ~ "Europe",
+      Country %in% Oceania ~ "Oceania",
+      TRUE ~ NA_character_),
+    P5_label = ifelse(p5 == 1, "P5 Member", "Non-P5"))
+
+continent_colors <- c(
+  "Africa" = "#1b9e77",
+  "Asia" = "#d95f02",
+  "Europe" = "#7570b3",
+  "North America" = "#e7298a",
+  "South America" = "#66a61e",
+  "Oceania" = "#e6ab02")
+
+RAdata
+```
+
+# Sort by One Country Per Row
+
+```{r}
+RAdata_country_avg <- RAdata |>
+  select(-Year) |>
+  group_by(Country) |>
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
+RAdata_country_avg
+```
+
+---
+
+# Introduction
+
+This project will investigate if a country with higher democracy levels, provides greater access to justice. Access to justice is the ability of ordinary people to use legal systems to resolve disputes and seek protection. Access to Justice varies dramatically across countries, and political scientists have long debated what explains this variation. My research question is: Do higher levels of liberal democracy improve access to justice? And my main hypothesis is that countries with stronger democratic institutions will have higher access to justice scores.
+
+This question matters because access to justice is a main component of rule of law and human rights. Democracies are meant to constrain state power, reduce arbitrary violence, and create institutions for resolving disputes. If democracy actually improves legal access, that has implications for how we think about international development, rule of law promotion, and human rights policy. It also connects to broader patterns visible in the data. Ratifiers of the Rome Statute, for instance, tend to be significantly more democratic than non-ratifiers, and atrocity levels vary sharply across regions in ways that track democratic governance. 
+
+# Data
+
+This analysis uses country‑year observational data from countries and , making the research design cross‑sectional with repeated observations, not experimental. The main dependent variable is the Access to Justice Index, which ranges from 0 to 1 and is constructed from expert assessments and survey‑based indicators of legal accessibility, fairness, and effectiveness. Higher values indicate stronger access to justice.
+
+The key independent variable is the Liberal Democracy Score, also ranging from 0 to 1, based on expert‑coded measures of electoral competition, civil liberties, and institutional constraints on the executive. Additional variables used for descriptive context include continent (categorical), total atrocities (count), and Rome Statute ratification (binary). Atrocities are measured using conflict‑event data that record killings, disappearances, and other forms of political violence.
+
+The hypothesis will be supported if the coefficient on Liberal Democracy is positive and statistically significant — that is, if more democratic countries systematically score higher on Access to Justice. A coefficient near zero or a p-value above 0.05 would undermine the hypothesis.
+
+To visualize the main outcome variable, the plot below shows the distribution of Access to Justice scores across all country-year observations, broken out by continent. The spread is wide, with meaningful variation both within and across regions, confirming that Access to Justice is a suitable dependent variable with sufficient range to detect relationships.
+
+
+## Average Atrocities by Continent
+
+The bar chart below provides descriptive context for why access to justice matters: Africa and Asia show the highest average levels of political violence (measured as logged atrocity counts), suggesting that regions with weaker rule of law face the most severe consequences. This motivates the central analysis, which examines whether stronger democratic institutions are associated with greater access to justice across all regions.
+
+```{r}
 RAdata |>
+  drop_na(Continent, Atrocities) |>
+  group_by(Continent) |>
+  summarize(
+    avg_atrocities = mean(Atrocities, na.rm = TRUE),
+    n = n()) |>
+  arrange(desc(avg_atrocities)) |>
+  ggplot(aes(x = reorder(Continent, avg_atrocities), 
+             y = avg_atrocities, 
+             fill = Continent)) +
+  geom_col() +
+  scale_fill_manual(values = continent_colors) +
+  labs(
+    title = "Average Atrocities by Continent",
+    x = "Continent",
+    y = "Average Total Atrocities") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"))
+```
+```{r}
+RAdata |>
+  drop_na(Continent, Access_to_Justice) |>
+  ggplot(aes(x = reorder(Continent, Access_to_Justice, FUN = median),
+             y = Access_to_Justice,
+             fill = Continent)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +
+  scale_fill_manual(values = continent_colors) +
+  labs(
+    title    = "Distribution of Access to Justice by Continent",
+    subtitle = "Each box spans the middle 50% of country-year observations",
+    x        = "Continent",
+    y        = "Access to Justice Index (0–1)") +
+  theme_minimal() +
+  theme(
+    plot.title    = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 11),
+    legend.position = "none")
+```
+
+
+#Results
+
+## Plot Main Analysis
+
+```{r}
+RAdata |>
+  filter(!is.na(Liberal_Democracy), !is.na(Access_to_Justice)) |>
   ggplot(aes(x = Liberal_Democracy, y = Access_to_Justice)) +
   geom_point(alpha = 0.3, color = "steelblue") +
   geom_smooth(method = "lm", se = TRUE, color = "darkred") +
   labs(
-    title = "Does Democracy Improve Access to Justice?",
+    title    = "Does Democracy Improve Access to Justice?",
     subtitle = "Country-Year Observations Worldwide",
     x = "Level of Liberal Democracy",
-    y = "Access to Justice Index") +
+    y = "Access to Justice Index"
+  ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),
+    plot.title    = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12)
+  )
+```
+A scatterplot of Liberal Democracy Score (x‑axis) and Access to Justice Index (y‑axis) shows a clear upward trend. The fitted line slopes positively, indicating that more democratic countries tend to provide greater access to justice. The relationship is not driven by a few outliers; the pattern is broadly consistent across the distribution.
+
+## Another Way to View Plot Main Analysis --- Country Averages
+```{r}
+RAdata_country_avg |>
+  filter(!is.na(Liberal_Democracy), !is.na(Access_to_Justice)) |>
+  ggplot(aes(x = Liberal_Democracy, y = Access_to_Justice)) +
+  geom_point(alpha = 0.75, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "darkred") +
+  labs(
+    title    = "Does Democracy Improve Access to Justice?",
+    subtitle = "Country-Year Observations Worldwide",
+    x = "Level of Liberal Democracy",
+    y = "Access to Justice Index"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title    = element_text(size = 16, face = "bold"),
     plot.subtitle = element_text(size = 12)
   )
 ```
 
+## Regression
 
-**The explanatory variables of interest in this analysis are the framing indicators included in the dataset, specifically frame_choice, frame_healthcare, frame_access, frame_race, frame_class, frame_life_fetus, frame_religious, and frame_health_impact. Each of these variables is measured as a binary indicator, coded 1 if the frame is present in the post and 0 if it is not (with 99 indicating not applicable).** Because not all posts employ the same framing strategies, these variables exhibit meaningful variation across observations, which allows for systematic comparison and regression analysis. **The outcome variable is stance, which captures the author’s position toward abortion rights and is coded as 1 = in favor, 2 = against, and 3 = neutral/unclear.** This categorical measurement allows the analysis to assess whether the presence of particular frames is associated with an increased likelihood of taking one stance over another
+```{r eval}
+fit <- lm(Access_to_Justice ~ Liberal_Democracy, data = RAdata)
+
+fit
+
+coef(fit)
+
+library(broom)
+glance(fit)
+
+tidy(fit) |>
+  select(term, estimate, std.error, p.value) |>
+  mutate(across(where(is.numeric), round, 3)) |>
+  knitr::kable(
+    col.names = c("Variable", "Coefficient", "Std. Error", "P-value"))
+```
+
+The regression results confirm and quantify what the scatterplot shows visually. The estimated coefficient on Liberal Democracy is 0.841 (Std. Error = 0.009, p < 0.001), meaning that a one-unit increase in the liberal democracy index — moving from fully authoritarian to fully liberal democratic — is associated with an increase of 0.841 points on the access-to-justice scale. Since both variables range from 0 to 1, this coefficient implies that democracy alone can account for nearly the entire observed spread in legal access across countries. The intercept of 0.300 indicates that even a country with the minimum democracy score is predicted to have some baseline access to justice, reflecting that formal legal institutions exist even in authoritarian states. The coefficient is highly statistically significant (p < 0.001), meaning we can confidently reject the null hypothesis that liberal democracy has no relationship with access to justice in the population.
+
+Despite the strength of this association, we should be cautious about interpreting the coefficient causally. This is a cross-sectional research design — countries are compared to one another at a point in time rather than tracked through an experimentally assigned change in democracy. The primary threat to causal inference is omitted variable bias: wealthier countries, for example, tend to be both more democratic and to have better-funded judicial institutions, meaning income could be driving both variables simultaneously. Additionally, because both the liberal democracy index and the access-to-justice index are constructed from the same V-Dem expert-survey methodology, shared measurement processes may artificially inflate the estimated correlation. For these reasons, the coefficient is best interpreted as a strong descriptive association rather than a causal effect of democratization on legal access.
+
+# Conclusion
+
+This analysis provides strong support for the hypothesis that more democratic political systems are associated with greater access to justice. The OLS regression estimates a coefficient of 0.841 on the Liberal Democracy Score, meaning that moving from the least to the most democratic country is associated with nearly a full-scale improvement (0.84 points) on the Access to Justice Index. This coefficient is statistically significant at well beyond the conventional threshold (p < 0.001), and the model explains approximately 71% of the variance in justice access across country-year observations — a strikingly high proportion for a single-variable model. Combined with the clear upward trend in the scatterplot, the evidence consistently supports the hypothesis.
+
+However, the analysis has important limitations that prevent causal inference. The research design is observational and cross-sectional, meaning selection into democracy is not random. Several plausible confounders — including GDP per capita, state capacity, colonial legal heritage, and cultural factors — independently influence both democratic development and legal institutions, creating omitted variable bias. The repeated country-year structure also means observations are not independent, inflating the precision of standard errors and potentially understating uncertainty. Additionally, both variables are drawn from expert-coded indices (V-Dem), which may share method-variance and artificially inflate the estimated correlation. To improve the analysis, future work should include economic and institutional controls, employ country fixed effects or first-differencing to exploit within-country variation over time, and ideally leverage a quasi-experimental source of variation in democratic institutions — such as the timing of democratic transitions — to obtain a more credible causal estimate.
