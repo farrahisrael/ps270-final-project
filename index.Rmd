@@ -4,7 +4,13 @@ author: "Farrah J. Israel"
 description: "My final project"
 output:
   html_document
----
+
+# Introduction
+
+This project will investigate if a country with higher democracy levels, provides greater access to justice. Access to justice is the ability of ordinary people to use legal systems to resolve disputes and seek protection. Access to Justice varies dramatically across countries, and political scientists have long debated what explains this variation. My research question is: Do higher levels of liberal democracy improve access to justice? And my main hypothesis is that countries with stronger democratic institutions will have higher access to justice scores.
+
+This question matters because access to justice is a main component of rule of law and human rights. Democracies are meant to constrain state power, reduce arbitrary violence, and create institutions for resolving disputes. If democracy actually improves legal access, that has implications for how we think about international development, rule of law promotion, and human rights policy. It also connects to broader patterns visible in the data. Ratifiers of the Rome Statute, for instance, tend to be significantly more democratic than non-ratifiers, and atrocity levels vary sharply across regions in ways that track democratic governance. 
+
 # Load the data
 
 ```{r}
@@ -95,13 +101,6 @@ RAdata_country_avg <- RAdata |>
 RAdata_country_avg
 ```
 
----
-
-# Introduction
-
-This project will investigate if a country with higher democracy levels, provides greater access to justice. Access to justice is the ability of ordinary people to use legal systems to resolve disputes and seek protection. Access to Justice varies dramatically across countries, and political scientists have long debated what explains this variation. My research question is: Do higher levels of liberal democracy improve access to justice? And my main hypothesis is that countries with stronger democratic institutions will have higher access to justice scores.
-
-This question matters because access to justice is a main component of rule of law and human rights. Democracies are meant to constrain state power, reduce arbitrary violence, and create institutions for resolving disputes. If democracy actually improves legal access, that has implications for how we think about international development, rule of law promotion, and human rights policy. It also connects to broader patterns visible in the data. Ratifiers of the Rome Statute, for instance, tend to be significantly more democratic than non-ratifiers, and atrocity levels vary sharply across regions in ways that track democratic governance. 
 
 # Data
 
