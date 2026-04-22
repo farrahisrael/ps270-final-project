@@ -137,8 +137,6 @@ This density plot shows the distribution of country-year observations of liberal
 
 #### Average Atrocities by Continent
 
-The bar chart below provides descriptive context for why access to justice matters: Africa and Asia show the highest average levels of political violence (measured as logged atrocity counts). Why might this be? This motivates the central analysis, which examines whether stronger democratic institutions are associated with greater access to justice across all regions.
-
 ```{r}
 RAdata |>
   drop_na(Continent, Atrocities) |>
@@ -160,8 +158,7 @@ RAdata |>
   theme(
     plot.title = element_text(size = 16, face = "bold"))
 ```
-
-The boxplot reveals clear regional variation in access to justice, with Europe and Oceania with the highest median Access to Justice scores while Asia and Africa show lower medians and wider spreads. It is surprising that Asia and Africa do not sit at the bottom of the distribution despite scoring high on atrocities in the barplot above. There are many reasons for this...maybe atrocities are often concentrated in specific countries or time periods within a region, while other countries in the same continent maintain relatively functional legal institutions that pull the regional average upward.
+The bar chart below provides descriptive context for why access to justice matters: Africa and Asia show the highest average levels of political violence (measured as logged atrocity counts). Why might this be? This motivates the central analysis, which examines whether stronger democratic institutions are associated with greater access to justice across all regions.
 
 #### Access to Justice by Continent
 ```{r}
@@ -183,6 +180,7 @@ RAdata |>
     plot.subtitle = element_text(size = 11),
     legend.position = "none")
 ```
+The boxplot reveals clear regional variation in access to justice, with Europe and Oceania with the highest median Access to Justice scores while Asia and Africa show lower medians and wider spreads. It is surprising that Asia and Africa do not sit at the bottom of the distribution despite scoring high on atrocities in the barplot above. There are many reasons for this...maybe atrocities are often concentrated in specific countries or time periods within a region, while other countries in the same continent maintain relatively functional legal institutions that pull the regional average upward.
 
 # Results
 
