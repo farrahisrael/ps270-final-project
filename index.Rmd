@@ -223,7 +223,7 @@ RAdata_country_avg |>
   )
 ```
 
-The two scatterplots (same graph, just viewed differently), strongly suggest that as liberal democracy increases, access to justice also tends to increase. The red line slopes upward, confirming this. While there is some scatter, the pattern is overall positive. desc
+The two scatterplots (same graph, just viewed differently), strongly suggest that as liberal democracy increases, access to justice also tends to increase. The red line slopes upward, confirming this. While there is some scatter, the pattern is overall positive. 
 
 
 ### Add the confounder to test (GDP data obtained from World Bank)
@@ -305,7 +305,7 @@ fit |>
   mutate(across(where(is.numeric), round, 3)) |>
   knitr::kable(col.names = c("Variable", "Coefficient", "Std. Error", "P-value"))
 ```
-The regression confirms and also quantifies what the scatterplot shows. The estimated coefficient on Liberal Democracy is **0.810 (Standard Error = 0.009, p < 0.001),** meaning there is not only a strong relationship, but also a statistically significant positive relationship. This means that a one unit increase in the liberal democracy index is associated with an increase of 0.810 on the 0-1 Access to Justice scale. A one-unit increase means moving from fully authoritarian to fully liberal democratic. Since both variables (Liberal Democracy Score and Access to Justice Index) range from 0-1, this coefficient implies that democracy alone accounts for nearly the entire spread in access to justice across counties. The intercept of **0.317 (Standard Error = 0.005, p < 0.001)** suggests that even countries with the lowest democracy scores are predicted to have some baseline level of access to justice. This means that formal legal institutions exist in authoritarian regimes. The vp-value rounds to zerom, allowing us to reject the hypothesis that liberal democracy has no relationship with access to justice.
+The regression confirms and also quantifies what the scatterplot shows. The estimated coefficient on Liberal Democracy is **0.810 (Standard Error = 0.009, p < 0.001),** meaning there is not only a strong relationship, but also a statistically significant positive relationship. This means that a one unit increase in the liberal democracy index is associated with an increase of 0.810 on the 0-1 Access to Justice scale. A one-unit increase means moving from fully authoritarian to fully liberal democratic. Since both variables (Liberal Democracy Score and Access to Justice Index) range from 0-1, this coefficient implies that democracy alone accounts for nearly the entire spread in access to justice across counties. The intercept of **0.317 (Standard Error = 0.005, p < 0.001)** suggests that even countries with the lowest democracy scores are predicted to have some baseline level of access to justice. This means that formal legal institutions exist in authoritarian regimes. The p-value rounds to zero, allowing us to reject the hypothesis that liberal democracy has no relationship with access to justice.
 
 ### Multivariate Regression
 
