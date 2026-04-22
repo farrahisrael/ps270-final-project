@@ -133,6 +133,7 @@ ggplot(RAdata, aes(x = Access_to_Justice)) +
     y = "Density") +
   theme_minimal()
 ```
+
 This density plot shows the distribution of country-year observations of liberal democracy scores. The distribution is right-skewed, with the largest concentration of country-year observations clustering near the upper end of the scale, reflecting the prevalence of established liberal democracies in the sample. The second peak is around 0.25. This reveals a distinct cluster of low-access countries, suggesting the index captures meaningful variation across regime types rather than concentrating all observations in the center.
 
 #### Average Atrocities by Continent
@@ -158,6 +159,7 @@ RAdata |>
   theme(
     plot.title = element_text(size = 16, face = "bold"))
 ```
+
 The bar chart below provides descriptive context for why access to justice matters: Africa and Asia show the highest average levels of political violence (measured as logged atrocity counts). Why might this be? This motivates the central analysis, which examines whether stronger democratic institutions are associated with greater access to justice across all regions.
 
 #### Access to Justice by Continent
@@ -180,6 +182,7 @@ RAdata |>
     plot.subtitle = element_text(size = 11),
     legend.position = "none")
 ```
+
 The boxplot reveals clear regional variation in access to justice, with Europe and Oceania with the highest median Access to Justice scores while Asia and Africa show lower medians and wider spreads. It is surprising that Asia and Africa do not sit at the bottom of the distribution despite scoring high on atrocities in the barplot above. There are many reasons for this...maybe atrocities are often concentrated in specific countries or time periods within a region, while other countries in the same continent maintain relatively functional legal institutions that pull the regional average upward.
 
 # Results
