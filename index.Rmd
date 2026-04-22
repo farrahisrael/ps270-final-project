@@ -23,7 +23,7 @@ load("RAData.RData")
 
 # Data
 
-This analysis uses country‑year observational data. This makes the research design **cross‑sectional** with repeated observations, not experimental. The **main dependent variable is the Access to Justice Index (v2xcl_acjst).** It is a continous measure from 0-1, low to high, where higher values indicate stronger access to justice. The data was calculated and obtained from the Varieties of Democracy (V-Dem) dataset which is based on the expert‑survey question, “Do citizens enjoy secure and effective access to justice?”
+This analysis uses country‑year observational data. This makes the research design **cross‑sectional** with repeated observations, not experimental. The **main dependent variable is the Access to Justice Index (v2xcl_acjst).** It is a continuous measure from 0-1, low to high, where higher values indicate stronger access to justice. The data was calculated and obtained from the Varieties of Democracy (V-Dem) dataset which is based on the expert‑survey question, “Do citizens enjoy secure and effective access to justice?”
 
 The key **independent variable is the Liberal Democracy Score (v2x_libdem).** It is also a continuous measure from 0-1, low to high, where higher values indicate stronger Liberal Democracy. The data was also calculated and obtained from the Varieties of Democracy (V-Dem) dataset. For this variable, the data comes from the question: “To what extent is the ideal of liberal democracy achieved?"
 
@@ -121,7 +121,17 @@ RAdata_country_avg <- RAdata |>
   summarize(across(where(is.numeric), mean, na.rm = TRUE))
 RAdata_country_avg
 ```
-
+# Plot visualizing main outcome of interest
+```{r}
+ggplot(RAdata, aes(x = Access_to_Justice)) +
+  geom_density(fill = "steelblue", alpha = 0.6) +
+  labs(
+    title = "Distribution of Access to Justice Index",
+    subtitle = "All Country-Year Observations",
+    x = "Access to Justice Index (0 = Low, 1 = High)",
+    y = "Density") +
+  theme_minimal()
+```
 
 #### Average Atrocities by Continent
 
@@ -212,6 +222,7 @@ RAdata_country_avg |>
     plot.subtitle = element_text(size = 12)
   )
 ```
+
 The two scatterplots (same graph, just viewed differently), strongly suggest that as liberal democracy increases, access to justice also tends to increase. The red line slopes upward, confirming this. While there is some scatter, the pattern is overall positive. desc
 
 
@@ -294,7 +305,7 @@ fit |>
   mutate(across(where(is.numeric), round, 3)) |>
   knitr::kable(col.names = c("Variable", "Coefficient", "Std. Error", "P-value"))
 ```
-The regression confirms and also quantifies what the scatterplot shows. The estimated coefficient on Liberal Democracy is 0.841 (Standard Error = 0.009, p < 0.001), meaning there is not only a strong relationship, but also a statistically significant positive relationship. This means that a one unit increase in the liberal democracy index is associated with an increase of 0.810 on the 0-1 Access to Justice scale. A one-unit increase means moving from fully authoritarian to fully liberal democratic. Since both variables (Liberal Democracy Score and Access to Justice Index) range from 0-1, this coefficient implies that democracy alone accounts for nearly the entire spread in access to justice across counties. The intercept of 0.317 (Standard Error = 0.005, p < 0.001) suggests that even countries with the lowest democracy scores are predicted to have some baseline level of access to justice. This means that formal legal institutions exist in authoritarian regimes. The vp-value rounds to zerom, allowing us to reject the hypothesis that liberal democracy has no relationship with access to justice.
+The regression confirms and also quantifies what the scatterplot shows. The estimated coefficient on Liberal Democracy is **0.810 (Standard Error = 0.009, p < 0.001),** meaning there is not only a strong relationship, but also a statistically significant positive relationship. This means that a one unit increase in the liberal democracy index is associated with an increase of 0.810 on the 0-1 Access to Justice scale. A one-unit increase means moving from fully authoritarian to fully liberal democratic. Since both variables (Liberal Democracy Score and Access to Justice Index) range from 0-1, this coefficient implies that democracy alone accounts for nearly the entire spread in access to justice across counties. The intercept of **0.317 (Standard Error = 0.005, p < 0.001)** suggests that even countries with the lowest democracy scores are predicted to have some baseline level of access to justice. This means that formal legal institutions exist in authoritarian regimes. The vp-value rounds to zerom, allowing us to reject the hypothesis that liberal democracy has no relationship with access to justice.
 
 ### Multivariate Regression
 
@@ -307,7 +318,7 @@ tidy(fit_2) |>
   knitr::kable(
     col.names = c("Variable", "Coefficient", "Std. Error", "P-value"))
 ```
-The multivariate regression predicts access to justice using liberal democracy and GDP per capita. The intercept of 0.215 (SE = 0.015) means that when both predictors are held at zero, the predicted access to justice score is 0.215 — a theoretical baseline that anchors the regression line. The main finding is the Liberal Democracy coefficient of 0.760 (SE = 0.012, p < 0.001), meaning that holding GDP constant, a one-unit increase in the liberal democracy index is associated with a 0.76-point increase in the access to justice score. The small standard error indicates this estimate is precisely measured and stable across samples. The GDP per capita coefficient of 0.015 (SE = 0.002, p < 0.001) on the log scale means that a one-unit increase in log GDP per capita is associated with a 0.015-point increase in access to justice. All three p-values round to zero, meaning none of these relationships are statistically consistent with a null effect. The democracy coefficient (0.760) is roughly 50 times the size of the GDP coefficient (0.015), confirming that democracy is the stronger predictor of the two.
+The multivariate regression predicts access to justice using liberal democracy and GDP per capita. The intercept of **0.215 (Standard Error = 0.015)** means that when both predictors are held at zero, the predicted access to justice score is 0.215 — a theoretical baseline that anchors the regression line. The main finding is the Liberal Democracy coefficient of **0.760 (Standard Error = 0.012, p < 0.001),** meaning that holding GDP constant, a one-unit increase in the liberal democracy index is associated with a 0.76-point increase in the access to justice score. The small standard error indicates this estimate is precisely measured and stable across samples. The GDP per capita coefficient of **0.015 (Standard Error = 0.002, p < 0.001)** on the log scale means that a one-unit increase in log GDP per capita is associated with a 0.015-point increase in access to justice. All three p-values round to zero, meaning none of these relationships are statistically consistent with a null effect. The democracy coefficient (0.760) is roughly 50 times the size of the GDP coefficient (0.015), confirming that democracy is the stronger predictor of the two.
 
 ### Another visual - taking into account confounders
 
