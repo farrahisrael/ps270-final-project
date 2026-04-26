@@ -1,5 +1,5 @@
 ---
-title: "PS270 Final Project"
+title: "Transitional Justice Research Project"
 author: "Farrah J. Israel"
 description: "My final project"
 output:
