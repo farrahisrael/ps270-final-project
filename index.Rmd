@@ -14,7 +14,7 @@ This final project specifically, will explore whether a country that has higher 
 
 #### Load the data
 
-```{r}
+```{r, echo = FALSE}
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
@@ -43,7 +43,7 @@ Here is the codebook that goes into more detail about the data: https://drive.go
 
 #### Rename Columns
 
-```{r}
+```{r, echo = FALSE}
 RAdata <- RAdata |>
   rename(
     Country = country,
@@ -62,7 +62,7 @@ RAdata
 ```
 #### Add Continent Column
 
-```{r}
+```{r, echo = FALSE}
 Africa <- c("Algeria","Angola","Benin","Botswana","Burkina Faso","Burundi","Cameroon",
   "Cape Verde","Central African Republic","Chad","Comoros","Cote d'Ivoire",
   "Democratic Republic of Congo","Egypt","Equatorial Guinea","Eritrea","Ethiopia",
@@ -114,7 +114,7 @@ RAdata
 
 #### Sort by One Country Per Row
 
-```{r}
+```{r, echo = FALSE}
 RAdata_country_avg <- RAdata |>
   select(-Year) |>
   group_by(Country) |>
@@ -122,23 +122,28 @@ RAdata_country_avg <- RAdata |>
 RAdata_country_avg
 ```
 
-# Plot visualizing main outcome of interest
-```{r}
+## Plot visualizing main outcome of interest
+```{r, echo = FALSE}
+RAdata <- RAdata |> 
+  filter(!is.na(Access_to_Justice),
+         is.finite(Access_to_Justice))
+
 ggplot(RAdata, aes(x = Access_to_Justice)) +
   geom_density(fill = "steelblue", alpha = 0.6) +
   labs(
     title = "Distribution of Access to Justice Index",
-    subtitle = "All Country-Year Observations",
     x = "Access to Justice Index (0 = Low, 1 = High)",
-    y = "Density") +
+    y = "Density"
+  ) +
   theme_minimal()
+
 ```
 
 This density plot shows the distribution of country-year observations of liberal democracy scores. The distribution is right-skewed, with the largest concentration of country-year observations clustering near the upper end of the scale, reflecting the prevalence of established liberal democracies in the sample. The second peak is around 0.25. This reveals a distinct cluster of low-access countries, suggesting the index captures meaningful variation across regime types rather than concentrating all observations in the center.
 
-#### Average Atrocities by Continent
+## Average Atrocities by Continent
 
-```{r}
+```{r, echo = FALSE}
 RAdata |>
   drop_na(Continent, Atrocities) |>
   group_by(Continent) |>
@@ -162,8 +167,8 @@ RAdata |>
 
 The bar chart below provides descriptive context for why access to justice matters: Africa and Asia show the highest average levels of political violence (measured as logged atrocity counts). Why might this be? This motivates the central analysis, which examines whether stronger democratic institutions are associated with greater access to justice across all regions.
 
-#### Access to Justice by Continent
-```{r}
+## Access to Justice by Continent
+```{r, echo = FALSE}
 RAdata |>
   drop_na(Continent, Access_to_Justice) |>
   ggplot(aes(x = reorder(Continent, Access_to_Justice, FUN = median),
@@ -189,7 +194,7 @@ The boxplot reveals clear regional variation in access to justice, with Europe a
 
 ### Plot Main Analysis
 
-```{r}
+```{r, echo = FALSE}
 RAdata |>
   filter(!is.na(Liberal_Democracy), !is.na(Access_to_Justice)) |>
   ggplot(aes(x = Liberal_Democracy, y = Access_to_Justice)) +
@@ -209,7 +214,7 @@ RAdata |>
 ```
 
 ### Another Way to View Plot Main Analysis --- Country Averages
-```{r}
+```{r, echo = FALSE}
 RAdata_country_avg |>
   filter(!is.na(Liberal_Democracy), !is.na(Access_to_Justice)) |>
   ggplot(aes(x = Liberal_Democracy, y = Access_to_Justice)) +
@@ -231,7 +236,7 @@ The two scatterplots (same graph, just viewed differently), strongly suggest tha
 
 
 ### Add the confounder to test (GDP data obtained from World Bank)
-```{r}
+```{r, echo = FALSE}
 load("RAData.RData")
 
 wb_raw <- read_csv(
@@ -295,9 +300,9 @@ save(merged, file = "RAData_merged.RData")
 merged |> head()
 ```
 
-### Bivariate Regression
+## Bivariate Regression
 
-```{r}
+```{r, echo = FALSE}
 library(broom)
 
 fit <- lm(Access_to_Justice ~ Liberal_Democracy, data = merged)
@@ -313,9 +318,9 @@ fit |>
 ```
 The regression confirms and also quantifies what the scatterplot shows. The estimated coefficient on Liberal Democracy is **0.810 (Standard Error = 0.009, p < 0.001),** meaning there is not only a strong relationship, but also a statistically significant positive relationship. This means that a one unit increase in the liberal democracy index is associated with an increase of 0.810 on the 0-1 Access to Justice scale. A one-unit increase means moving from fully authoritarian to fully liberal democratic. Since both variables (Liberal Democracy Score and Access to Justice Index) range from 0-1, this coefficient implies that democracy alone accounts for nearly the entire spread in access to justice across counties. The intercept of **0.317 (Standard Error = 0.005, p < 0.001)** suggests that even countries with the lowest democracy scores are predicted to have some baseline level of access to justice. This means that formal legal institutions exist in authoritarian regimes. The p-value rounds to zero, allowing us to reject the hypothesis that liberal democracy has no relationship with access to justice.
 
-### Multivariate Regression
+## Multivariate Regression
 
-```{r}
+```{r, echo = FALSE}
 fit_2 <- lm(Access_to_Justice ~ Liberal_Democracy + log(gdp_per_capita), data = merged)
 
 tidy(fit_2) |>
@@ -332,7 +337,7 @@ The multivariate regression predicts access to justice using liberal democracy a
 
 ### Another visual - taking into account confounders
 
-```{r}
+```{r, echo = FALSE}
 merged |>
   filter(Atrocities > 0) |>
   ggplot(aes(
